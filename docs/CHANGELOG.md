@@ -4,6 +4,11 @@ All notable changes to HolyClaude will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.6-apefrei.1]
+
+### Changed
+- CloudCLI is now installed directly from npm (`@cloudcli-ai/cloudcli@latest`) instead of a vendored tarball, so every image rebuild automatically picks up the latest version
+
 ## [1.2.6] - 05/28/2026
 
 ### Added
@@ -26,9 +31,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [1.2.3] - 05/27/2026
 
 ### Changed
-- Refreshed dependency surfaces with Node.js 26.2.0, s6-overlay 3.2.3.0, pinned npm and Python package versions, pinned GitHub Actions, and pinned CloudCLI plugin SHAs.
+- Refreshed dependency surfaces with Node.js 26.2.0, s6-overlay 3.2.3.0, pinned npm and Python package versions, pinned GitHub Actions, and CloudCLI plugin SHAs.
 - Retained CloudCLI 1.26.3 after rejecting the 2.0.0 artifact because required HolyClaude patches could not be carried forward safely.
-- Recorded site dependency and copy updates as follow-up only, with no site commit included in this release.
 
 ### Fixed
 - Changed required CloudCLI patch misses to fail closed during the image build instead of continuing after warnings.
