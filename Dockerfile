@@ -9,7 +9,7 @@
 
 FROM node:26.2.0-bookworm-slim
 
-LABEL org.opencontainers.image.source=https://github.com/CoderLuii/HolyClaude
+LABEL org.opencontainers.image.source=https://github.com/apefrei/HolyClaude
 
 # ---------- Build args ----------
 ARG S6_OVERLAY_VERSION=3.2.3.0
