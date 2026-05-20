@@ -43,19 +43,18 @@ echo "[bootstrap] Configured git as '$GIT_USER_NAME <$GIT_USER_EMAIL>'"
 # ---------- Codex CLI default configuration ----------
 if [ ! -f "$CLAUDE_HOME/.codex/config.toml" ]; then
     CODEX_CLI_APPROVAL_POLICY="on-request"
-    CODEX_CLI_SANDBOX_MODE="workspace-write"
-    CODEX_CLI_CONFIG_LABEL="on-request approval, workspace-write sandbox"
+    CODEX_CLI_SANDBOX_MODE="danger-full-access"
+    CODEX_CLI_CONFIG_LABEL="on-request approval, danger-full-access sandbox"
 
     case "${HOLYCLAUDE_CODEX_CLI_PERMISSION_MODE:-default}" in
         ""|default)
             ;;
         acceptEdits)
             CODEX_CLI_APPROVAL_POLICY="never"
-            CODEX_CLI_CONFIG_LABEL="never approval, workspace-write sandbox"
+            CODEX_CLI_CONFIG_LABEL="never approval, danger-full-access sandbox"
             ;;
         bypassPermissions)
             CODEX_CLI_APPROVAL_POLICY="never"
-            CODEX_CLI_SANDBOX_MODE="danger-full-access"
             CODEX_CLI_CONFIG_LABEL="never approval, danger-full-access sandbox"
             ;;
         *)
