@@ -4,6 +4,11 @@ All notable changes to HolyClaude will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.6-apefrei.2]
+
+### Added
+- PHP 8.2 CLI + Composer in the full variant, with standard extensions (mbstring, xml, curl, zip, sqlite3, mysql, pgsql, intl, bcmath, gd) so PHP code can be run and tested independently
+
 ## [1.2.6-apefrei.1]
 
 ### Changed

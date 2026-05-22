@@ -67,6 +67,29 @@ pip install --break-system-packages <package>
 ```
 The `--break-system-packages` flag is required (no venv in container context).
 
+## PHP 8.2
+
+### Pre-installed:
+- **PHP CLI:** `php` — run scripts with `php script.php` or one-liners with `php -r '...'`
+- **Composer:** `composer` — PHP dependency manager (`composer init`, `composer require <pkg>`, `composer install`)
+- **Extensions:** mbstring, xml, curl, zip, sqlite3, mysql, pgsql, intl, bcmath, gd
+
+### Running and testing PHP code:
+```bash
+php -v                           # Show PHP version
+php script.php                   # Run a script
+php -r 'echo "hello\n";'         # One-liner
+php -S 127.0.0.1:8000            # Built-in dev web server
+php -l script.php                # Lint / syntax check
+composer require --dev phpunit/phpunit   # Project-local test framework
+vendor/bin/phpunit               # Run PHPUnit tests
+```
+
+### Installing additional extensions:
+```bash
+sudo apt-get update && sudo apt-get install -y php-<extension>
+```
+
 ## AI CLI Providers
 
 | CLI | Command | Notes |

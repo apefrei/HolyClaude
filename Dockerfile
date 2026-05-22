@@ -72,6 +72,19 @@ RUN if [ "$VARIANT" = "full" ]; then \
     && rm -rf /var/lib/apt/lists/*; \
     fi
 
+# ---------- PHP 8.2 + Composer (full only) ----------
+# PHP CLI for running and testing PHP code independently
+RUN if [ "$VARIANT" = "full" ]; then \
+    apt-get update && apt-get install -y --no-install-recommends \
+      php-cli \
+      php-mbstring php-xml php-curl php-zip \
+      php-sqlite3 php-mysql php-pgsql \
+      php-intl php-bcmath php-gd \
+    && curl -fsSL https://getcomposer.org/installer | php -- \
+         --install-dir=/usr/local/bin --filename=composer \
+    && rm -rf /var/lib/apt/lists/*; \
+    fi
+
 # ---------- Azure CLI (full only) ----------
 RUN if [ "$VARIANT" = "full" ]; then \
     curl -sL https://aka.ms/InstallAzureCLIDeb | bash \

@@ -20,6 +20,9 @@
 [![Issues](https://img.shields.io/github/issues/CoderLuii/HolyClaude?color=ff80eb&labelColor=black&style=flat-square)](https://github.com/CoderLuii/HolyClaude/issues)
 [![Contributors](https://img.shields.io/github/contributors/CoderLuii/HolyClaude?color=c4f042&labelColor=black&style=flat-square)](https://github.com/CoderLuii/HolyClaude/graphs/contributors)
 
+> **Fork notice — this is `apefrei/HolyClaude`, not upstream.**
+> A personal fork of [CoderLuii/HolyClaude](https://github.com/CoderLuii/HolyClaude) with its own development branch `apefrei/build`. Every push to that branch triggers CI to build and publish the full/amd64 image to GHCR — there is no separate release gate. Fork-specific releases are versioned as `X.Y.Z-apefrei.N` in the [CHANGELOG](docs/CHANGELOG.md) to stay clear of upstream's version space. Notable fork additions: PHP 8.2 + Composer in the full variant.
+
 ### Stop configuring. Start building.
 
 One command. Full AI development workstation. Claude Code, web UI, headless browser, 7 AI CLIs, 50+ dev tools — containerized and ready.
@@ -619,6 +622,19 @@ The full image includes everything above, plus:
 | `pandoc` | Convert between any document format (markdown, HTML, PDF, docx, epub...) |
 | `ffmpeg` | Video and audio processing (extract, convert, transcode) |
 | `libvips-dev` | High-performance image processing library |
+
+</details>
+
+<details>
+<summary><strong>PHP 8.2 + Composer — run and test PHP code independently</strong></summary>
+
+| Package | What it's for |
+|---------|---------------|
+| `php-cli` | PHP 8.2 command-line interpreter — run scripts, one-liners (`php -r`), built-in dev server (`php -S`) |
+| `composer` | PHP dependency manager — installs PHPUnit, PHPStan, framework packages per project |
+| `php-mbstring`, `php-xml`, `php-curl`, `php-zip` | Standard string, XML, HTTP, and archive extensions |
+| `php-sqlite3`, `php-mysql`, `php-pgsql` | Database drivers — pair with the pre-installed `sqlite3`, `psql`, MySQL clients |
+| `php-intl`, `php-bcmath`, `php-gd` | Internationalization, arbitrary-precision math, image manipulation |
 
 </details>
 
