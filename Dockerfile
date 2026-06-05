@@ -181,7 +181,15 @@ RUN if [ "$VARIANT" = "full" ]; then \
     fi
 
 # ---------- CloudCLI (web UI for Claude Code) ----------
-RUN npm i -g @cloudcli-ai/cloudcli@1.28.0
+# Always install the latest CloudCLI on every image build. CLOUDCLI_CACHEBUST is
+# set to the commit SHA in CI so this layer (and the downstream patches) are
+# invalidated on every push, guaranteeing the web UI is refreshed. For local
+# rebuilds, override with `--build-arg CLOUDCLI_CACHEBUST=$(date +%s)` or
+# `--no-cache` to force a fresh install.
+ARG CLOUDCLI_VERSION=latest
+ARG CLOUDCLI_CACHEBUST=0
+RUN echo "[cloudcli] cachebust=${CLOUDCLI_CACHEBUST} version=${CLOUDCLI_VERSION}" && \
+    npm i -g @cloudcli-ai/cloudcli@${CLOUDCLI_VERSION}
 COPY scripts/patch-cloudcli-apprise-notifications.mjs /tmp/patch-cloudcli-apprise-notifications.mjs
 COPY scripts/patch-cloudcli-codex-permissions.mjs /tmp/patch-cloudcli-codex-permissions.mjs
 RUN touch /usr/local/lib/node_modules/@cloudcli-ai/cloudcli/.env

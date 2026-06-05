@@ -50,5 +50,6 @@ jobs:
           tags: ${{ env.GHCR_IMAGE }}:latest
           build-args: |
             VARIANT=full
+            CLOUDCLI_CACHEBUST=${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -4,6 +4,11 @@ All notable changes to HolyClaude will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.6-apefrei.3]
+
+### Changed
+- CloudCLI install reverted to `@latest` (was pinned to `1.28.0`) and now uses a `CLOUDCLI_CACHEBUST` build arg wired to `${{ github.sha }}` in the GHCR workflow, so every push to `apefrei/build` invalidates the install layer and bakes the current CloudCLI release into the image (previously stuck at 1.28 while upstream advanced to 1.33).
+
 ## [1.2.6-apefrei.2]
 
 ### Added
