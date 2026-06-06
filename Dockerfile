@@ -204,10 +204,15 @@ RUN CLOUDCLI_INDEX="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/server/ind
     echo "[patch] WebSocket frame type fix applied (both directions)" || \
     echo "[patch] WARNING: WebSocket pattern not found, skipping (may be fixed upstream)"
 
+# Resolve the bundle filename once (it contains a content hash that changes on every CloudCLI release)
+RUN find /usr/local/lib/node_modules/@cloudcli-ai/cloudcli/dist/assets/ -name "index-*.js" | head -1 > /tmp/cloudcli-bundle-path && \
+    echo "[cloudcli] bundle: $(cat /tmp/cloudcli-bundle-path)"
+
 # patch: preserve Shell tab scroll position across periodic refresh (issue #35)
-RUN CLOUDCLI_BUNDLE="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/dist/assets/index-X3ImjnMV.js" && \
-    grep -q 'const B=()=>{v.current?.focus()}' "$CLOUDCLI_BUNDLE" && \
-    perl -pi -e 's/const B=\(\)=>\{v\.current\?\.focus\(\)\}/const B=()=>{const _vp=v.current?.buffer?.active?.viewportY??0;v.current?.focus();v.current?.scrollToLine(_vp)}/g' "$CLOUDCLI_BUNDLE" && \
+# Uses a capture-group regex so it matches regardless of the minifier variable names.
+RUN CLOUDCLI_BUNDLE=$(cat /tmp/cloudcli-bundle-path) && \
+    grep -qE 'const [A-Z]=\(\)=>\{[a-z]\.current\?\.focus\(\)\}' "$CLOUDCLI_BUNDLE" && \
+    perl -pi -e 's/const ([A-Z])=\(\)=>\{([a-z])\.current\?\.focus\(\)\}/const $1=()=>{const _vp=$2.current?.buffer?.active?.viewportY??0;$2.current?.focus();$2.current?.scrollToLine(_vp)}/g' "$CLOUDCLI_BUNDLE" && \
     echo "[patch] Shell scroll position fix applied" || \
     echo "[patch] WARNING: Shell scroll pattern not found, skipping (may be fixed upstream)"
 
@@ -219,28 +224,28 @@ RUN CLOUDCLI_COMMANDS="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/server/
     echo "[patch] WARNING: commands.js newModel pattern not found, skipping"
 
 # patch v1.2.2-2: bundle expose setClaudeModel in claudeModel context spread (issue #36)
-RUN CLOUDCLI_BUNDLE="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/dist/assets/index-X3ImjnMV.js" && \
+RUN CLOUDCLI_BUNDLE=$(cat /tmp/cloudcli-bundle-path) && \
     grep -q 'claudeModel:W,codexModel:V' "$CLOUDCLI_BUNDLE" && \
     perl -pi -e 's/\QclaudeModel:W,codexModel:V\E/claudeModel:W,setClaudeModel:L,codexModel:V/g' "$CLOUDCLI_BUNDLE" && \
     echo "[patch] bundle setClaudeModel context spread applied" || \
     echo "[patch] WARNING: bundle claudeModel:W pattern not found, skipping"
 
 # patch v1.2.2-3: bundle wire setClaudeModel:lS2 into cursorModel destructure (issue #36)
-RUN CLOUDCLI_BUNDLE="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/dist/assets/index-X3ImjnMV.js" && \
+RUN CLOUDCLI_BUNDLE=$(cat /tmp/cloudcli-bundle-path) && \
     grep -q 'cursorModel:o,claudeModel:l,codexModel:c' "$CLOUDCLI_BUNDLE" && \
     perl -pi -e 's/\QcursorModel:o,claudeModel:l,codexModel:c\E/cursorModel:o,claudeModel:l,setClaudeModel:lS2,codexModel:c/g' "$CLOUDCLI_BUNDLE" && \
     echo "[patch] bundle setClaudeModel:lS2 destructure applied" || \
     echo "[patch] WARNING: bundle cursorModel destructure pattern not found, skipping"
 
 # patch v1.2.2-4: bundle apply newModel on SSE model event (issue #36)
-RUN CLOUDCLI_BUNDLE="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/dist/assets/index-X3ImjnMV.js" && \
+RUN CLOUDCLI_BUNDLE=$(cat /tmp/cloudcli-bundle-path) && \
     grep -q 'case"model":k({type:"assistant"' "$CLOUDCLI_BUNDLE" && \
     perl -pi -e 's/\Qcase"model":k({type:"assistant"\E/case"model":me.newModel\&\&lS2\&\&(lS2(me.newModel),localStorage.setItem("claude-model",me.newModel));k({type:"assistant"/g' "$CLOUDCLI_BUNDLE" && \
     echo "[patch] bundle SSE model event handler applied" || \
     echo "[patch] WARNING: bundle case\"model\" pattern not found, skipping"
 
 # patch v1.2.2-5: bundle add custom model option to select (issue #36)
-RUN CLOUDCLI_BUNDLE="/usr/local/lib/node_modules/@cloudcli-ai/cloudcli/dist/assets/index-X3ImjnMV.js" && \
+RUN CLOUDCLI_BUNDLE=$(cat /tmp/cloudcli-bundle-path) && \
     grep -q 'children:N.OPTIONS.map(({value:C,label:j})=>s.jsx("option",{value:C,children:j},C+j))}' "$CLOUDCLI_BUNDLE" && \
     perl -pi -e 's/\Qchildren:N.OPTIONS.map(({value:C,label:j})=>s.jsx("option",{value:C,children:j},C+j))}\E/children:[...N.OPTIONS.map(({value:C,label:j})=>s.jsx("option",{value:C,children:j},C+j)),!N.OPTIONS.some(C=>C.value===k)\&\&k\&\&s.jsx("option",{value:k,children:k},k+"custom")].filter(Boolean)}/g' "$CLOUDCLI_BUNDLE" && \
     echo "[patch] bundle custom model select option applied" || \
